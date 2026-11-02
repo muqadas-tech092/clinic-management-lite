@@ -1,0 +1,16 @@
+{
+  "name": "Clinic Management Lite",
+  "short_name": "Clinic Lite",
+  "description": "Appointments, token queue, consultations, prescriptions, billing, inventory and reports for small clinics.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F3F7F8",
+  "theme_color": "#087F8C",
+  "icons": [
+    { "src": "assets/logo.png", "sizes": "256x256", "type": "image/png", "purpose": "any" },
+    { "src": "assets/logo.png", "sizes": "256x256", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
