@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+data/clinic.db
+data/clinic.db-wal
+data/clinic.db-shm
+data/uploads/
+backups/*.db
+.streamlit/secrets.toml
+__pycache__/
