@@ -10,6 +10,96 @@ PKR currency, Asia/Karachi time zone, printable prescriptions, receipts, token s
 
 ---
 
+## Web edition (GitHub Pages)
+
+A second edition of the same product runs **entirely in the browser** and is published from this repository with
+GitHub Pages. Nothing is installed and no server is involved: the app shell is static HTML, CSS and ES modules in
+[`web/`](web/), and every record (patients, appointments, tokens, consultations, prescriptions, invoices, payments,
+stock, users, audit log, logo) lives in the browser's **IndexedDB** on the device that opened the link.
+
+**Live link:** <https://muqadas-tech092.github.io/clinic-management-lite/>
+
+| | Python edition | Web edition |
+|---|---|---|
+| Runs | on one PC with Python installed | in any modern browser (Chrome, Edge, Firefox, Safari), installable as a PWA |
+| Storage | `data/clinic.db` (SQLite) | IndexedDB of that browser profile |
+| Prints | PDF files (ReportLab) | print-ready HTML (prescription, receipt, token slip, reports) via the browser print dialog |
+| Charts | Plotly | dependency-free SVG charts |
+| Passwords | bcrypt | PBKDF2-SHA256 through Web Crypto (needs https or localhost) |
+| Rules | `core/repo.py` | `web/js/repo.js` (same rules, same numbering, same role matrix) |
+
+Everything else is the same: modules, roles, demo accounts, English + Urdu with RTL, PKR, Asia/Karachi dates, the
+prototype notice and the medical-safety rule (documentation only, nothing clinical is suggested or generated).
+
+### One-time setup for the live link
+
+1. On GitHub open **Settings > Pages** and set **Source** to **GitHub Actions** (already done for this repository).
+2. Every push to `main` that touches `web/` runs [`.github/workflows/pages.yml`](.github/workflows/pages.yml), which
+   publishes the `web/` folder. The run appears under the **Actions** tab; the site is live about a minute later.
+3. Open the live link. On first launch the app seeds the synthetic demo data and shows the demo accounts on the
+   login screen (`admin` / `Admin@123`, `reception` / `Reception@123`, `dr.ayesha` / `Doctor@123`, `dr.imran` / `Doctor@123`).
+
+To run it locally without GitHub, serve the folder with any static server, for example:
+
+```bat
+python -m http.server 8765 --directory web
+```
+
+and open <http://localhost:8765>. Opening `index.html` directly from the file system does not work (ES modules and
+Web Crypto need http or https).
+
+### Backup and restore (web edition)
+
+- **Settings > Backup & restore > Download backup (JSON)** writes one file with every record, the settings and the logo.
+  Keep it somewhere safe; the browser profile is the only copy of the data otherwise (clearing site data, a different
+  browser or a different device means a different, empty database).
+- **Restore from backup file** replaces the current data with a JSON backup made by this app and signs everyone out.
+- **Reset to demo data** wipes the browser database and re-creates the synthetic demo set.
+- Recommended routine: download a backup at the end of every working day and store it off the device.
+
+### White-label (web edition)
+
+- [`web/config.js`](web/config.js): product name, version, reseller details, storage namespace (`storageKey`, change
+  it when several clinics share one browser), clinic defaults, theme colours, feature switches and licence notice.
+- Clinic name, tagline, address, phone, logo, footers, paper size, language and fees: **Settings** inside the app.
+- Translations: [`web/js/i18n.js`](web/js/i18n.js). Permissions: `PERMISSIONS` in [`web/js/auth.js`](web/js/auth.js).
+- Print layouts: [`web/js/print.js`](web/js/print.js) plus the `.doc` rules in [`web/css/app.css`](web/css/app.css).
+- When files change, bump `CACHE_VERSION` in [`web/sw.js`](web/sw.js) so installed copies refresh their offline cache.
+
+### Structure of `web/`
+
+```
+web/
+  index.html             app shell (login screen, sidebar, top bar, view container, print root)
+  config.js              white-label configuration (window.CML_CONFIG)
+  manifest.webmanifest   PWA manifest
+  sw.js                  service worker: offline cache of the shell, CACHE_VERSION
+  css/app.css            design system (teal / navy / light), RTL rules, print document styles
+  js/store.js            IndexedDB persistence, state tables, date/time (Asia/Karachi), money and validation helpers
+  js/repo.js             business rules and queries (port of core/repo.py)
+  js/auth.js             PBKDF2 passwords, login, lockout, sessions, role matrix
+  js/seed.js             synthetic demo data (port of core/seed.py)
+  js/i18n.js             English / Urdu strings (port of core/i18n.py)
+  js/icons.js            Lucide icons as inline SVG
+  js/ui.js               shared UI helpers, modals, tables, CSV, print preview
+  js/charts.js           SVG charts
+  js/print.js            prescription, receipt, token slip and report documents
+  js/router.js           hash router
+  js/app.js              boot, login, shell, routing
+  js/views/*.js          one module per sidebar entry
+  assets/                logo
+```
+
+### Review items specific to the web edition
+
+The notices in the app say it plainly: this is a prototype and the data lives only in that browser. Before any use
+with real patient data it needs a security, privacy, backup and regulatory review. Specific points: there is no
+server-side access control (anyone with the device and the browser profile can read the IndexedDB), no encryption at
+rest beyond what the operating system provides, backups are manual, and a cleared browser cache deletes the clinic's
+only copy of its records unless a backup exists.
+
+---
+
 ## Contents
 
 1. [Quick start (Windows)](#quick-start-windows)

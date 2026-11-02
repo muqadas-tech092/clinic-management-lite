@@ -27,7 +27,7 @@ export function render(_root, app) {
   ])}
   <div class="grid grid-8-5">
     <div class="card">${section(`${t("todays_schedule")} · ${label}`, "calendar", appts.length)}
-      ${appts.length ? `<div class="list">${appts.map((r) => listRow({ title: `${esc(r.patient)} <span class="faint num">${esc(r.patient_code)}</span>`, sub: `${esc(r.doctor)} · ${esc(app.t(r.visit_type === "Walk-in" ? "walk_in" : r.visit_type === "Follow-up" ? "report_appointments" : "visit_type") && statusLabelSafe(r.visit_type))}`,
+      ${appts.length ? `<div class="list">${appts.map((r) => listRow({ title: `${esc(r.patient)} <span class="faint num">${esc(r.patient_code)}</span>`, sub: `${esc(r.doctor)} · ${esc(statusLabel(r.visit_type))}`,
         lead: `<span class="time num">${fmtTime(r.appt_time)}</span>${r.token_no ? tokenChip(r.token_no) : `<span class="tok ghost">${icon("user", 16)}</span>`}`, value: statusBadge(r.status), attrs: `class="row clickable" data-patient="${r.patient_id}"` })).join("")}</div>` : emptyState(t("no_appointments_today"), "", "calendar")}
     </div>
     <div class="card">${section(t("live_queue"), "ticket", q.length)}
@@ -57,4 +57,3 @@ export function render(_root, app) {
   root.addEventListener("click", (e) => { const r = e.target.closest("[data-patient]"); if (r && !e.target.closest("[data-nav]")) app.navigate("patients", { id: r.dataset.patient }); });
 }
 import { statusLabel } from "../i18n.js";
-const statusLabelSafe = (v) => statusLabel(v);
