@@ -256,6 +256,7 @@ table.tbl { width: 100%; border-collapse: separate; border-spacing: 0; font-size
 .tbl tbody tr.clickable { cursor: pointer; } .tbl tbody tr.clickable:hover td { background: var(--primary-softer); }
 .tbl td.num, .tbl th.num { text-align: end; font-variant-numeric: tabular-nums; }
 .tbl td.actions-cell, .tbl th.actions-cell { text-align: end; white-space: nowrap; }
+.tbl .cell-main { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .tbl .cell-main b { display: block; font-weight: 600; } .tbl .cell-main span { display: block; font-size: 0.76rem; color: var(--faint); }
 .tbl td.muted { color: var(--faint); }
 .pager { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 12px; font-size: 0.8rem; color: var(--muted); flex-wrap: wrap; }

@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "clinic",
+      "name": "web-edition",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "streamlit", "run", "app.py", "--server.port", "8502", "--server.headless", "true"],
-      "port": 8502
+      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "web", "--bind", "127.0.0.1"],
+      "port": 8765
     }
   ]
 }
